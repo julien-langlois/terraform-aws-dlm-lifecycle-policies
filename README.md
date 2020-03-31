@@ -14,9 +14,6 @@ volume that needs to be supported by the DLM Lifecycle must be tagged with
 module "dlm-lifecycle" {
   source = "julien-langlois/dlm-lifecycle-policies/aws"
 
-  unique_name     = "unique_name"
-  stack_prefix    = "dlm_lifecycle"
-
   dlm_policies = [
     { description = "DLM7", snapshot_name = "Rolling backup 7 days", start_time = "01:00", interval_hours = 4, retention_count = 7 },
     { description = "DLM14", snapshot_name = "Rolling backup 14 days", start_time = "04:00", interval_hours = 12, retention_count = 14 },
@@ -31,7 +28,7 @@ module "dlm-lifecycle" {
 | ------------- | ------------------------------------------------------------- | :---------------: | :-------------: | :------: |
 | unique\_name  | Enter Unique Name to identify the Terraform Stack (lowercase) |      string       |      `v1`       |    no    |
 | stack\_prefix | Stack Prefix for resource generation                          |      string       | `dlm_lifecycle` |    no    |
-| dlm\_policies | Policies to be created                                        | list(map(string)) |       ""        |    no    |
+| dlm\_policies | Policies to be created                                        | list(map(string)) |       ""        |   yes    |
 
 ## Outputs
 
