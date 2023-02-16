@@ -22,10 +22,12 @@ resource "aws_dlm_lifecycle_policy" "policies" {
       name = lookup(var.dlm_policies[count.index], "snapshot_name", "Schedule ${count.index}")
 
       create_rule {
-        interval      = lookup(var.dlm_policies[count.index], "interval_hours", 24)
-        interval_unit = "HOURS"
-        times         = [lookup(var.dlm_policies[count.index], "start_time", "03:00")]
+        cron_expression = lookup(var.dlm_policies[count.index], "cron_expression", null)
+        interval        = var.dlm_policies[count.index]["cron_expression"] != null ? null : lookup(var.dlm_policies[count.index], "interval_hours", 24)
+        interval_unit   = var.dlm_policies[count.index]["cron_expression"] != null ? null : "HOURS"
+        times           = var.dlm_policies[count.index]["cron_expression"] != null ? null : [lookup(var.dlm_policies[count.index], "start_time", "03:00")]
       }
+
       retain_rule {
         count = lookup(var.dlm_policies[count.index], "retention_count", 7)
       }
