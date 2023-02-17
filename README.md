@@ -2,7 +2,47 @@
 
 This terraform module is designed to help in using the AWS DLM Lifecycle. Each
 volume that needs to be supported by the DLM Lifecycle must be tagged with
-`Snapshot = "true"`.
+the tags defined by variable `target_tags` (default `Snapshot = "true"`)
+
+## Usage
+
+```hcl
+module "dlm-lifecycle" {
+  source = "julien-langlois/dlm-lifecycle-policies/aws"
+
+  dlm_policies = [
+    {
+      description = "DLM7"
+      snapshot_name = "Rolling backup 7 days"
+      start_time = "01:00"
+      interval_hours = 4
+      retention_count = 7
+    },
+    {
+      description = "DLM14"
+      snapshot_name = "Rolling backup 14 days"
+      start_time = "04:00"
+      interval_hours = 12
+      retention_count = 14
+    },
+    {
+      description = "DLM30"
+      snapshot_name = "Rolling backup 30 days"
+      start_time = "21:00"
+      interval_hours = 2
+      retention_count = 30
+    },
+    {
+      description = "DLM40"
+      resource_types  = "INSTANCE"
+      snapshot_name = "WeeklyBackupAMI"
+      cron_expression = "cron(0 3 * * SUN *)" # Every Sunday 3am
+      retention_count = 15
+    },
+    }
+  ]
+}
+```
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
