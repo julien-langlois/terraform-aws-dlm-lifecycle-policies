@@ -37,8 +37,6 @@ resource "aws_dlm_lifecycle_policy" "policies" {
       copy_tags = lookup(var.dlm_policies[count.index], "copy_tags", false)
     }
 
-    target_tags = {
-      Snapshot = "true"
-    }
+    target_tags = var.target_tags
   }
 }

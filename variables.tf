@@ -14,3 +14,11 @@ variable "dlm_policies" {
   description = "DLM Policies to be created"
   type        = list(map(string))
 }
+
+variable "target_tags" {
+  description = "A map of tag keys and their values. Any resources that match the resource_types and are tagged with any of these tags will be targeted."
+  type        = map(string)
+  default = {
+    "Snapshot" = "true"
+  }
+}
