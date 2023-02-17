@@ -86,8 +86,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | Identifier of the DLM Lifecycle Policy |
-| <a name="output_policies_arns"></a> [policies\_arns](#output\_policies\_arns) | Amazon Resource Name (ARN) of the DLM Lifecycle Policy |
+| <a name="output_arns"></a> [arns](#output\_arns) | Amazon Resource Name (ARN) of the DLM Lifecycle Policy |
+| <a name="output_ids"></a> [ids](#output\_ids) | Identifier of the DLM Lifecycle Policy |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Related documentation
