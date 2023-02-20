@@ -12,31 +12,31 @@ resource "aws_iam_role_policy" "dlm_lifecycle" {
 resource "aws_dlm_lifecycle_policy" "policies" {
   count = length(var.dlm_policies)
 
-  description        = lookup(var.dlm_policies[count.index], "description", "Snapshot Lifecycle Policy ${count.index}")
+  description        = var.dlm_policies[count.index]["description"]
   execution_role_arn = aws_iam_role.dlm_lifecycle_role.arn
-  state              = lookup(var.dlm_policies[count.index], "state", "ENABLED")
+  state              = var.dlm_policies[count.index]["state"]
 
   policy_details {
-    resource_types = [lookup(var.dlm_policies[count.index], "resource_types", "VOLUME")]
+    resource_types = [var.dlm_policies[count.index]["resource_types"]]
     schedule {
-      name = lookup(var.dlm_policies[count.index], "snapshot_name", "Schedule ${count.index}")
+      name = coalesce(var.dlm_policies[count.index]["snapshot_name"], var.dlm_policies[count.index]["description"])
 
       create_rule {
-        interval      = lookup(var.dlm_policies[count.index], "interval_hours", 24)
-        interval_unit = "HOURS"
-        times         = [lookup(var.dlm_policies[count.index], "start_time", "03:00")]
+        cron_expression = var.dlm_policies[count.index]["cron_expression"]
+        interval        = var.dlm_policies[count.index]["cron_expression"] != null ? null : var.dlm_policies[count.index]["interval_hours"]
+        interval_unit   = var.dlm_policies[count.index]["cron_expression"] != null ? null : "HOURS"
+        times           = var.dlm_policies[count.index]["cron_expression"] != null ? null : [var.dlm_policies[count.index]["start_time"]]
       }
+
       retain_rule {
-        count = lookup(var.dlm_policies[count.index], "retention_count", 7)
+        count = var.dlm_policies[count.index]["retention_count"]
       }
       tags_to_add = {
         SnapshotCreator = "DLM"
       }
-      copy_tags = lookup(var.dlm_policies[count.index], "copy_tags", false)
+      copy_tags = var.dlm_policies[count.index]["copy_tags"]
     }
 
-    target_tags = {
-      Snapshot = "true"
-    }
+    target_tags = var.dlm_policies[count.index]["target_tags"]
   }
 }
